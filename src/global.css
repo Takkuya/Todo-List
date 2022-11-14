@@ -24,3 +24,11 @@ body {
   color: var(--gray-100);
   font-family: "Inter";
 }
+
+body,
+input,
+textarea,
+button {
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+}
