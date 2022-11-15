@@ -28,6 +28,8 @@ export const Tasks = () => {
   ).length
 
   function handleNewTaskChange(event: ChangeEvent<HTMLInputElement>) {
+    event.target.setCustomValidity("")
+
     setNewTaskContent(event.target.value)
   }
 
@@ -50,6 +52,8 @@ export const Tasks = () => {
         { id: uuidv4(), content: newTaskContent, isCompleted: false },
       ])
     )
+
+    setNewTaskContent("")
   }
 
   function deleteTask(idToDelete: string) {
@@ -94,6 +98,7 @@ export const Tasks = () => {
           <input
             type="text"
             name="task"
+            value={newTaskContent}
             placeholder="Adicione uma nova tarefa"
             onChange={handleNewTaskChange}
             onInvalid={handleNewTaskInvalid}
