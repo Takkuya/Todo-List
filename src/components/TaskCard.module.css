@@ -20,21 +20,25 @@
   gap: 1.5rem;
 }
 
-.taskCardWrapper p {
-  margin-left: 1rem;
+.taskCardWrapper > div p {
+  margin-left: 0.5rem;
+
+  /* break content into lines */
+  word-break: break-all;
+  line-height: 1.6;
 }
 
 .taskCardWrapper .deleteBtn {
   font-size: 0;
   background: transparent;
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem 0.5rem;
   width: 32px;
   height: 32px;
 }
 
 .taskCardWrapper .deleteBtn:hover {
   background: var(--gray-400);
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem 0.5rem;
   border-radius: 8px;
   font-size: 0;
 }
@@ -56,9 +60,14 @@
   width: 0;
 }
 
+input:checked + .taskCardContent {
+  text-decoration: line-through;
+}
+
 /* Create a custom checkbox */
 .checkmark {
   position: absolute;
+  margin-top: 5px;
   height: 20px;
   width: 20px;
   background-color: transparent;

@@ -1,22 +1,38 @@
 import styles from "./TaskCard.module.css"
 import { Trash } from "phosphor-react"
 
-export const TaskCard = () => {
+type TaskCardProps = {
+  id: string
+  isChecked: boolean
+  content: string
+  onDeleteTask: (idToDelete: string) => void
+  setIsChecked: (isChecked: boolean) => void
+}
+
+export const TaskCard = ({
+  id,
+  isChecked,
+  content,
+  onDeleteTask,
+  setIsChecked,
+}: TaskCardProps) => {
+  function handleDeleteTask() {
+    onDeleteTask(id)
+  }
+  function handleIsChecked() {
+    setIsChecked(!isChecked)
+  }
+
   return (
     <div className={styles.taskCardWrapper}>
       <div>
         <label className={styles.checkbox}>
-          <input type="checkbox" />
+          <input type="checkbox" onClick={handleIsChecked} />
           <span className={styles.checkmark}></span>
         </label>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-          pariatur quas, quisquam ut, repellat nostrum at qui ipsa aliquam
-          necessitatibus veritatis veniam aliquid rem officia provident quia
-          omnis, voluptas placeat?
-        </p>
+        <p className={styles.taskCardContent}>{content}</p>
       </div>
-      <button className={styles.deleteBtn}>
+      <button className={styles.deleteBtn} onClick={handleDeleteTask}>
         <Trash size={16} weight="bold" />
       </button>
     </div>
