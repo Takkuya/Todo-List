@@ -5,23 +5,23 @@ import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react"
 import { PlusCircle } from "phosphor-react"
 import { v4 as uuidv4 } from "uuid"
 
-type TasksCreated = {
+type Tasks = {
   id: string
   content: string
-  isComplete: boolean
+  isCompleted: boolean
 }
 
 export const Tasks = () => {
-  const [isChecked, setIsChecked] = useState(false)
   const [newTaskContent, setNewTaskContent] = useState("")
-  const [tasks, setTasks] = useState<TasksCreated[]>([])
+  const [tasks, setTasks] = useState<Tasks[]>([])
 
   const tasksCount = tasks.length
   const isNewTaskContentEmpty = newTaskContent.trim().length === 0
+  const completedTasksCount = tasks.filter(
+    (task) => task.isCompleted === true
+  ).length
 
   function handleNewTaskChange(event: ChangeEvent<HTMLInputElement>) {
-    console.log(event.target.value)
-
     setNewTaskContent(event.target.value)
   }
 
@@ -29,12 +29,12 @@ export const Tasks = () => {
     event.target.setCustomValidity("Esse campo é obrigatório")
   }
 
-  function createNewTask(event: FormEvent) {
+  function handleCreateNewTask(event: FormEvent) {
     event.preventDefault()
 
     setTasks([
       ...tasks,
-      { id: uuidv4(), content: newTaskContent, isComplete: isChecked },
+      { id: uuidv4(), content: newTaskContent, isCompleted: false },
     ])
   }
 
@@ -46,10 +46,23 @@ export const Tasks = () => {
     setTasks(tasksWithoutDeletedOne)
   }
 
+  function handleCheckedTasks(taskId: string, checkedTask: boolean) {
+    const newTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          isCompleted: !task.isCompleted,
+        }
+      }
+      return task
+    })
+    setTasks(newTasks)
+  }
+
   return (
     <>
       <div>
-        <form className={styles.formWrapper} onSubmit={createNewTask}>
+        <form className={styles.formWrapper} onSubmit={handleCreateNewTask}>
           <input
             type="text"
             name="task"
@@ -73,7 +86,9 @@ export const Tasks = () => {
           <div className={styles.completedTasks}>
             Concluídas
             {tasksCount > 0 ? (
-              <span className={styles.taskCount}>0 de {tasksCount}</span>
+              <span className={styles.taskCount}>
+                {completedTasksCount} de {tasksCount}
+              </span>
             ) : (
               <span className={styles.taskCount}>{tasksCount}</span>
             )}
@@ -89,8 +104,7 @@ export const Tasks = () => {
                     id={task.id}
                     content={task.content}
                     onDeleteTask={deleteTask}
-                    isChecked={isChecked}
-                    setIsChecked={setIsChecked}
+                    onCheckedTask={handleCheckedTasks}
                   />
                 )
               })}
