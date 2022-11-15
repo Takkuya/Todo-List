@@ -1,7 +1,13 @@
 import styles from "./Tasks.module.css"
 import clipboardSvg from "../assets/clipboard.svg"
 import { TaskCard } from "./TaskCard"
-import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react"
+import {
+  ChangeEvent,
+  FormEvent,
+  InvalidEvent,
+  useEffect,
+  useState,
+} from "react"
 import { PlusCircle } from "phosphor-react"
 import { v4 as uuidv4 } from "uuid"
 
@@ -36,6 +42,14 @@ export const Tasks = () => {
       ...tasks,
       { id: uuidv4(), content: newTaskContent, isCompleted: false },
     ])
+
+    localStorage.setItem(
+      "task",
+      JSON.stringify([
+        ...tasks,
+        { id: uuidv4(), content: newTaskContent, isCompleted: false },
+      ])
+    )
   }
 
   function deleteTask(idToDelete: string) {
@@ -44,9 +58,10 @@ export const Tasks = () => {
     })
 
     setTasks(tasksWithoutDeletedOne)
+    localStorage.setItem("task", JSON.stringify(tasksWithoutDeletedOne))
   }
 
-  function handleCheckedTasks(taskId: string, checkedTask: boolean) {
+  function handleWhenTaskIsChecked(taskId: string) {
     const newTasks = tasks.map((task) => {
       if (task.id === taskId) {
         return {
@@ -57,7 +72,20 @@ export const Tasks = () => {
       return task
     })
     setTasks(newTasks)
+    localStorage.setItem("task", JSON.stringify(newTasks))
   }
+
+  function getTasksFromLocalStorage() {
+    const savedTasks = localStorage.getItem("task")
+
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks))
+    }
+  }
+
+  useEffect(() => {
+    getTasksFromLocalStorage()
+  }, [])
 
   return (
     <>
@@ -104,7 +132,7 @@ export const Tasks = () => {
                     id={task.id}
                     content={task.content}
                     onDeleteTask={deleteTask}
-                    onCheckedTask={handleCheckedTasks}
+                    onCheckedTask={handleWhenTaskIsChecked}
                   />
                 )
               })}
