@@ -136,6 +136,7 @@ export const Tasks = () => {
                     key={task.id}
                     id={task.id}
                     content={task.content}
+                    checked={task.isCompleted}
                     onDeleteTask={deleteTask}
                     onCheckedTask={handleWhenTaskIsChecked}
                   />

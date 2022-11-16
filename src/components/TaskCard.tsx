@@ -5,6 +5,7 @@ import { ChangeEvent } from "react"
 type TaskCardProps = {
   id: string
   content: string
+  checked: boolean
   onDeleteTask: (idToDelete: string) => void
   onCheckedTask: (taskId: string, checkedTask: boolean) => void
 }
@@ -12,6 +13,7 @@ type TaskCardProps = {
 export const TaskCard = ({
   id,
   content,
+  checked,
   onDeleteTask,
   onCheckedTask,
 }: TaskCardProps) => {
@@ -27,7 +29,7 @@ export const TaskCard = ({
     <div className={styles.taskCardWrapper}>
       <div>
         <label className={styles.checkbox}>
-          <input type="checkbox" onChange={handleCheckedTask} />
+          <input type="checkbox" onChange={handleCheckedTask} checked={checked}/>
           <span className={styles.checkmark}></span>
           <p className={styles.taskCardContent}>{content}</p>
         </label>
